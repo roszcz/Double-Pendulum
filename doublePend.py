@@ -1,17 +1,17 @@
-from manim import *
+import manim as M
 from math import sin, cos, pi
 import numpy as np
 from numpy.linalg import inv
 
 
-class DoublePendulum(Scene):
-    def __init__(self):
+class DoublePendulum(M.Scene):
+    def __init__(self, l2):
         # Masses of the ball
         self.m1 = 2
         self.m2 = 5
         # Length of the rigid massless rods
         self.l1 = 2
-        self.l2 = 1
+        self.l2 = l2
         # Acceleration due to gravity
         self.g = 9.81
         # Factor to decrease the velocity by
@@ -21,9 +21,9 @@ class DoublePendulum(Scene):
         self.dt = 0.0001
         # runtime represents how long each frame should run. runtime = 1/fps
         # Change frame rate from here
-        config.frame_rate = 24
+        M.config.frame_rate = 60
         # do not change this
-        self.runtime = 1 / config.frame_rate
+        self.runtime = 1 / M.config.frame_rate
         # time_max represents for how long (in seconds) the overall animation should run
         self.time_max = 30
         # Initial angles of the masses
@@ -103,7 +103,7 @@ class DoublePendulum(Scene):
         """
         start_point = Point1.get_center()
         end_point = Point2.get_center()
-        line = Line(start_point, end_point).set_stroke(width=2)
+        line = M.Line(start_point, end_point).set_stroke(width=2)
         return line
 
     def construct(self):
@@ -136,24 +136,24 @@ class DoublePendulum(Scene):
             y[0:2] = self.dissipation_factor * y[0:2]
 
         # Adding the axes
-        axes = NumberPlane().set_opacity(0.1)
+        axes = M.NumberPlane().set_opacity(0.1)
         self.add(axes)
 
         # Pendulum Motion
-        Center = Dot()
+        Center = M.Dot()
         x1_initial, y1_initial = points[0][0]
         x2_initial, y2_initial = points[1][0]
 
         # Circles representing the masses
         Circle1 = (
-            Dot(radius=0.04 * self.m1, z_index=10)
-            .move_to(x1_initial * RIGHT + y1_initial * UP)
-            .set_color(BLUE)
+            M.Dot(radius=0.04 * self.m1, z_index=10)
+            .move_to(x1_initial * M.RIGHT + y1_initial * M.UP)
+            .set_color(M.BLUE)
         )
         Circle2 = (
-            Dot(radius=0.04 * self.m2, z_index=10)
-            .move_to(x2_initial * RIGHT + y2_initial * UP)
-            .set_color(BLUE)
+            M.Dot(radius=0.04 * self.m2, z_index=10)
+            .move_to(x2_initial * M.RIGHT + y2_initial * M.UP)
+            .set_color(M.BLUE)
         )
 
         # Initializing the lines and adding update functions
@@ -168,7 +168,7 @@ class DoublePendulum(Scene):
 
         # Adding the lines, masses and center dot to the screen
         self.add(Line1, Line2, Center, Circle1, Circle2)
-        traj = VGroup()
+        traj = M.VGroup()
 
         # Arrays containing components of their respective coordinates at each time interval
         x1 = [points1[0] for points1 in points[0]]
@@ -180,7 +180,7 @@ class DoublePendulum(Scene):
         # the trajectory update function
         i = 0
 
-        traj = VGroup()
+        traj = M.VGroup()
 
         # Update function for the trajectory
         def traj_update(mob):
@@ -190,14 +190,14 @@ class DoublePendulum(Scene):
             if end_idx > start_idx:
                 # Adding the points history of trajectory
                 traj_points = [
-                    x2[num] * RIGHT + y2[num] * UP
+                    x2[num] * M.RIGHT + y2[num] * M.UP
                     for num in range(start_idx, end_idx, step)
                 ]
                 traj_points.append(Circle2.get_center())
 
                 # Creating VGroup for the trajectory
-                updated_traj = VGroup().set_points_smoothly(traj_points)
-                updated_traj.set_stroke(color=BLUE, width=1)
+                updated_traj = M.VGroup().set_points_smoothly(traj_points)
+                updated_traj.set_stroke(color=M.BLUE, width=1)
                 mob.become(updated_traj)
 
         traj.add_updater(traj_update)
@@ -206,8 +206,8 @@ class DoublePendulum(Scene):
         # Animating the masses moving
         for i in range(0, points.shape[1], int(self.runtime / self.dt)):
             self.play(
-                Circle1.animate.move_to(x1[i] * RIGHT + y1[i] * UP),
-                Circle2.animate.move_to(x2[i] * RIGHT + y2[i] * UP),
+                Circle1.animate.move_to(x1[i] * M.RIGHT + y1[i] * M.UP),
+                Circle2.animate.move_to(x2[i] * M.RIGHT + y2[i] * M.UP),
                 run_time=self.runtime,
-                rate_func=linear,
+                rate_func=M.linear,
             )
