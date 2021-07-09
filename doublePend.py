@@ -25,11 +25,11 @@ class DoublePendulum(M.Scene):
         # do not change this
         self.runtime = 1 / M.config.frame_rate
         # time_max represents for how long (in seconds) the overall animation should run
-        self.time_max = 30
+        self.time_max = 10
         # Initial angles of the masses
         self.theta1, self.theta2 = (pi, pi / 2)
         # number of seconds before current time to show trail
-        self.trail_seconds = 0.5
+        self.trail_seconds = 2.5
 
         super().__init__()
 
@@ -136,7 +136,12 @@ class DoublePendulum(M.Scene):
             y[0:2] = self.dissipation_factor * y[0:2]
 
         # Adding the axes
-        axes = M.NumberPlane().set_opacity(0.1)
+        # axes = M.NumberPlane().set_opacity(0.1)
+        axes = M.NumberPlane(
+            x_range=(-4, 4, 1),
+            y_range=(-4, 4, 1)
+        ).set_opacity(0.1)
+        axes = axes.set_opacity(0.1)
         self.add(axes)
 
         # Pendulum Motion

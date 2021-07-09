@@ -4,19 +4,24 @@ from doublePend import DoublePendulum
 
 
 def main():
-    resolution = 400, 400
+    # Pixels
+    resolution = 1080, 1080
     M.config['video_dir'] = 'media/'
+    M.config['images_dir'] = 'media/'
+    M.config['save_last_frame'] = True
 
-    l2_values = [0.5 + 0.3 * it for it in range(5)]
+    # NumberPlane units (2 * "radius")
+    M.config['frame_width'] = 2 * 4
+    M.config['frame_height'] = 2 * 4
 
-    for it, l2 in enumerate(l2_values):
-        output_name = f'douple-p-l2-{it}'
-        M.config['output_file'] = output_name
+    l2 = 1
+    output_name = 'douple-p-l2-hd-2'
+    M.config['output_file'] = output_name
 
-        # Make each movie in different resultion
-        M.config['pixel_width'] = resolution[0] + it * 100
-        M.config['pixel_height'] = resolution[1] + it * 50
-        scene = DoublePendulum(l2=l2)
-        scene.render()
-        print('Finished rendering for:', l2)
-        print('==' * 40)
+    # Make each movie in different resultion
+    M.config['pixel_width'] = resolution[0]
+    M.config['pixel_height'] = resolution[1]
+    scene = DoublePendulum(l2=l2)
+    scene.render()
+    print('Finished rendering for:', l2)
+    print('==' * 40)
