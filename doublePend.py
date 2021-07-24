@@ -1,11 +1,11 @@
 import manim as M
-from math import sin, cos, pi
 import numpy as np
+from math import sin, cos, pi
 from numpy.linalg import inv
 
 
 class DoublePendulum(M.Scene):
-    def __init__(self, l2):
+    def __init__(self, l2=1):
         # Masses of the ball
         self.m1 = 2
         self.m2 = 5
@@ -15,21 +15,21 @@ class DoublePendulum(M.Scene):
         # Acceleration due to gravity
         self.g = 9.81
         # Factor to decrease the velocity by
-        self.dissipation_factor = 0.999999
+        self.dissipation_factor = 0.99999
 
         # timestep
         self.dt = 0.0001
         # runtime represents how long each frame should run. runtime = 1/fps
         # Change frame rate from here
-        M.config.frame_rate = 60
+        M.config.frame_rate = 30
         # do not change this
         self.runtime = 1 / M.config.frame_rate
         # time_max represents for how long (in seconds) the overall animation should run
-        self.time_max = 10
+        self.time_max = 30
         # Initial angles of the masses
         self.theta1, self.theta2 = (pi, pi / 2)
         # number of seconds before current time to show trail
-        self.trail_seconds = 2.5
+        self.trail_seconds = 2.
 
         super().__init__()
 
@@ -136,12 +136,11 @@ class DoublePendulum(M.Scene):
             y[0:2] = self.dissipation_factor * y[0:2]
 
         # Adding the axes
-        # axes = M.NumberPlane().set_opacity(0.1)
         axes = M.NumberPlane(
             x_range=(-4, 4, 1),
             y_range=(-4, 4, 1)
-        ).set_opacity(0.1)
-        axes = axes.set_opacity(0.1)
+        )
+        axes = axes.set_opacity(0.05)
         self.add(axes)
 
         # Pendulum Motion
@@ -150,15 +149,17 @@ class DoublePendulum(M.Scene):
         x2_initial, y2_initial = points[1][0]
 
         # Circles representing the masses
+        c1_color = '#40E0D0'
         Circle1 = (
             M.Dot(radius=0.04 * self.m1, z_index=10)
             .move_to(x1_initial * M.RIGHT + y1_initial * M.UP)
-            .set_color(M.BLUE)
+            .set_color(c1_color)
         )
+        c2_color = '#008080'
         Circle2 = (
             M.Dot(radius=0.04 * self.m2, z_index=10)
             .move_to(x2_initial * M.RIGHT + y2_initial * M.UP)
-            .set_color(M.BLUE)
+            .set_color(c2_color)
         )
 
         # Initializing the lines and adding update functions
@@ -202,7 +203,8 @@ class DoublePendulum(M.Scene):
 
                 # Creating VGroup for the trajectory
                 updated_traj = M.VGroup().set_points_smoothly(traj_points)
-                updated_traj.set_stroke(color=M.BLUE, width=1)
+                traj_color = '#2E8B57'
+                updated_traj.set_stroke(color=traj_color, width=1)
                 mob.become(updated_traj)
 
         traj.add_updater(traj_update)
