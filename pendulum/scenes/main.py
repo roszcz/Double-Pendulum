@@ -24,7 +24,7 @@ class DoublePendulum(M.Scene):
         self.time_max = 5
         # Initial angles of the masses
         # number of seconds before current time to show trail
-        self.trail_seconds = 2.
+        self.trail_seconds = 0.04
 
         super().__init__()
 
