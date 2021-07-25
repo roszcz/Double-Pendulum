@@ -1,4 +1,5 @@
 import manim as M
+import pandas as pd
 
 from pendulum.scenes import main as pendulum_scenes
 
@@ -29,3 +30,8 @@ def scene_from_trajectory(df):
     scene.render()
     print('Finished rendering for:', l2)
     print('==' * 40)
+
+
+if __name__ == '__main__':
+    df = pd.read_csv('cycle-0x08.csv')
+    scene_from_trajectory(df)
